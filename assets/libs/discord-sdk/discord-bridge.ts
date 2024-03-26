@@ -1,12 +1,14 @@
 import { _decorator, Component, director, Label, Node, EventTarget } from 'cc';
-import { DiscordSDK } from "@discord/embedded-app-sdk";
-import { DISCORD_ACTIVITY_URL, DISCORD_CLIENT_ID } from '../../scripts/consts';
+import { DiscordSDK, Orientation } from "@discord/embedded-app-sdk";
+import { DISCORD_ACTIVITY_URL, DISCORD_CLIENT_ID } from '../../scripts/constants';
+import { EventSchema } from '@discord/embedded-app-sdk/output/schema/events';
+import { OrientationTypeObject } from '@discord/embedded-app-sdk/output/schema/types';
 const { ccclass, property } = _decorator;
 
 
 @ccclass('discordBridge')
 export class DiscordBridge extends Component {
-    
+
     static Instance: DiscordBridge;
 
     discordSdk: DiscordSDK;
@@ -24,7 +26,7 @@ export class DiscordBridge extends Component {
         return activityChannelName;
     }
 
-    onEnable(){
+    onEnable() {
         DiscordBridge.Instance = this;
     }
 
@@ -34,6 +36,8 @@ export class DiscordBridge extends Component {
         this.discordSdk = discordSdk;
         this.setupDiscordSdk().then(async () => {
             this.events.emit('sdkReady');
+        }).catch((e) => {
+            this.events.emit('setupSdkError', e);
         });
 
     }
@@ -59,7 +63,10 @@ export class DiscordBridge extends Component {
             body: JSON.stringify({
                 code,
             }),
-        });
+        }).catch(() => {
+            throw new Error("Unexpected error. (10503)");
+        })
+
         const { access_token } = await response.json();
 
         this.auth = await this.discordSdk.commands.authenticate({
@@ -71,5 +78,3 @@ export class DiscordBridge extends Component {
         }
     }
 }
-
-
