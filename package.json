@@ -1,0 +1,10 @@
+{
+  "name": "DiscordProject",
+  "uuid": "4211d3cf-08fc-4e96-9991-4073868c8c10",
+  "creator": {
+    "version": "3.8.2"
+  },
+  "dependencies": {
+    "@discord/embedded-app-sdk": "^1.0.2"
+  }
+}
