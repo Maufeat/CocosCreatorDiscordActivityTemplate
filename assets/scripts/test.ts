@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Node } from 'cc';
-import { DiscordBridge } from '../libs/DiscordSDK/discordBridge';
+import { DiscordBridge } from '../libs/discord-sdk/discord-bridge.ts';
 const { ccclass, property } = _decorator;
 
 @ccclass('test')
